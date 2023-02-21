@@ -1,0 +1,105 @@
+{
+    "experim_name": "lq",
+    "ignore_index": 255,
+    "lr_scheduler": "Poly",
+    "model": {
+        "data_h_w": [
+            512,
+            512
+        ],
+        "resnet": 101,
+        "semi": true,
+        "sup_loss": "CE",
+        "supervised": false,
+        "un_loss": "semi_ce",
+        "warm_up_epoch": 1
+    },
+    "n_gpu": 1,
+    "n_labeled_examples": 2646,
+    "name": "PS-MT(VOC12)",
+    "optimizer": {
+        "args": {
+            "lr": 0.0025,
+            "momentum": 0.9,
+            "weight_decay": 0.0001
+        },
+        "type": "SGD"
+    },
+    "ramp_up": 12,
+    "train_supervised": {
+        "augment": true,
+        "base_size": 600,
+        "crop_size": 512,
+        "data_dir": "/home/yuhao/Desktop/phd_Y1/data/DB/VOC2012",
+        "flip": true,
+        "ignore_index": 255,
+        "mean": [
+            0.485,
+            0.456,
+            0.406
+        ],
+        "n_labeled_examples": 2646,
+        "rotate": false,
+        "scale": true,
+        "split": "train_supervised",
+        "std": [
+            0.229,
+            0.224,
+            0.225
+        ]
+    },
+    "train_unsupervised": {
+        "augment": true,
+        "base_size": 600,
+        "crop_size": 512,
+        "data_dir": "/home/yuhao/Desktop/phd_Y1/data/DB/VOC2012",
+        "flip": true,
+        "ignore_index": 255,
+        "mean": [
+            0.485,
+            0.456,
+            0.406
+        ],
+        "n_labeled_examples": 2646,
+        "rotate": false,
+        "scale": true,
+        "split": "train_unsupervised",
+        "std": [
+            0.229,
+            0.224,
+            0.225
+        ],
+        "use_weak_lables": false,
+        "weak_labels_output": "pseudo_labels/result/pseudo_labels"
+    },
+    "trainer": {
+        "epochs": 80,
+        "gamma": 0.5,
+        "log_dir": "saved/",
+        "log_per_iter": 20,
+        "save_dir": "saved/",
+        "save_period": 1,
+        "sharp_temp": 0.5,
+        "val": true,
+        "val_per_epochs": 1
+    },
+    "unsupervised_w": 1.5,
+    "use_weak_lables": false,
+    "val_loader": {
+        "data_dir": "/home/yuhao/Desktop/phd_Y1/data/DB/VOC2012",
+        "ignore_index": 255,
+        "mean": [
+            0.485,
+            0.456,
+            0.406
+        ],
+        "split": "val",
+        "std": [
+            0.229,
+            0.224,
+            0.225
+        ],
+        "val": true
+    },
+    "weakly_loss_w": 0.4
+}

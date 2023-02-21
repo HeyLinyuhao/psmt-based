@@ -1,0 +1,55 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: pretrainedall-first-warmup5-732
+  namespace: aiml-javen-research 
+spec:
+  backoffLimit: 0
+  template:
+    spec:
+      restartPolicy: Never
+      volumes:
+        - name: gcp-credentials
+          secret:
+            secretName: gcp
+            items:
+              - key: data-manager
+                path: data-manager.json
+        - name: shared-memory
+          emptyDir:
+            medium: Memory 
+
+      containers:
+        - name: pretrainedall-first-warmup5-732
+          image: docker.aiml.team/yuhao.lin/dadie2:latest
+          stdin: true
+          tty: true
+          command: ["/bin/bash", "-c"]
+          args: 
+            - git clone https://yuhao.lin:$GITLAB_TOKEN@gitlab.aiml.team/yuhao.lin/dadie4.git &&
+              cd dadie4 && 
+              python VocCode/main.py --gcloud --ddp --gpus=2 --backbone=101 --batch_size=8 --labeled_examples=732 --learning-rate=2.5e-3 --unsup_weight=0.6 --warm_up=10 --semi_p_th=0.6 --semi_n_th=0. --epochs=80
+
+          resources:
+            limits:
+              nvidia.com/gpu: 2
+              memory: 80Gi
+              cpu: 8000m
+            requests:
+              nvidia.com/gpu: 2
+              memory: 80Gi
+              cpu: 8000m
+          volumeMounts:
+            - mountPath: /etc/gcp
+              name: gcp-credentials
+              readOnly: true
+            - name: shared-memory
+              mountPath: /dev/shm
+          env:
+            - name: GOOGLE_APPLICATION_CREDENTIALS
+              value: /etc/gcp/data-manager.json
+            - name: GITLAB_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: yuhao
+                  key: token
